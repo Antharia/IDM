@@ -8,6 +8,7 @@ class Idm
         SDL_Window* window;
         SDL_Renderer* renderer;
 
-        void createWindow();
-        void close();
+        bool setup();
+        bool run();
+        bool close();
 };
