@@ -27,6 +27,7 @@ class Idm:
                 "color0" : (80, 80, 80),
                 "color1" : (250, 250, 250)
                 }
+        #  select 1st image from 1st directory
         self.selected_directory = 0
         self.selected_image = 0
 
@@ -35,6 +36,8 @@ class Idm:
         setup function is ran once at the startup
         """
         pygame.display.set_caption(self.caption)
+        #  disable key repeat
+        # TODO fix disabling key repeat
         pygame.key.set_repeat()
 
     def handle_keyboard(self):
@@ -46,7 +49,8 @@ class Idm:
             self.selected_directory += 1
             if self.selected_directory > len(self.dir_list):
                 self.selected_directory = len(self.dir_list) - 1
-        # TODO: ajouter une touche pour revenir à la première image d'un répertoire
+        if pygame.key.get_pressed()[pygame.K_HOME]:
+            self.selected_directory = 0
 
     def draw(self):
         """
@@ -73,8 +77,23 @@ class Idm:
             self.handle_keyboard()
             self.draw()
 
-#   TODO: il vaudrait mieux créer une classe Directory qui contiendrait la liste d'image et l'image sélectionnée
-#   pour garder en mémoire l'image sélectionnée quand on change de répertoire
+class Directory:
+    """
+    A directory is selected or not, keep in memory the image selected in
+    the list of images it contains
+    """
+    def __init__(self):
+        self.path = path
+        self.name = os.path.basename(path)
+        self.image_list = []
+        self.selected_image = 0
+        self.list_images(self)
+
+    def list_images(self):
+        for root, dirs, files in os.walk(self.path):
+            for each_item in files:
+                if each_item.endswith(".jpg"):
+                    self.image_list.append(each_item)
 
 class Image:
     """
